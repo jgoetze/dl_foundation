@@ -19,8 +19,8 @@ Events are prefixed with a adjustable value. Default is "dlf.".
 
 Therefor the following default events exist:
 
-* **dlf.formInput** (called on any value change)
-* **dlf.formSubmit** (called on valid form submit)
+* **dlf.receivedInput** (called on any value change)
+* **dlf.receivedSubmit** (called on valid form submit)
 * **dlf.clicked** (called on a click)
 * **dlf.enteredViewport** (called when an element enters the viewport)
 * **dlf.leftViewport** (called when an element leaves the viewport)
