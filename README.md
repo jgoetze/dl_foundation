@@ -1,6 +1,6 @@
 # DataLayer Foundation
 
-dl_foundation is a small event listener, tracking basic web events like **clicks**, **views** and **inputs**.
+**dl_foundation** is a small event listener, tracking basic web events like **clicks**, **views** and **inputs**.
 
 It uses basic HTML markup and triggers, which does not require any template adjustments.
 
@@ -8,7 +8,7 @@ It uses basic HTML markup and triggers, which does not require any template adju
 
 Events are tracked for common HTML nodes like **header**, **main** and others (see full list below).
 Also nodes with an **ID** will be observed. This means you need to have a well structured HTML
-document, containing relevant Tags and with IDs on important elements like CTA buttons.
+document, containing relevant tags as well as IDs on important elements like CTA buttons.
 
 ## Events Tracked
 
@@ -40,6 +40,6 @@ The events always contain the same data, if it available for a node:
 
 Here is the list of selectors the listeners work on:
 
-**Viewport Events:** "[id], form, header, main, footer"
-**Click Events:** "button, a, input, [id]"
-**Form Events:** "form"
+* **Viewport Events:** "[id], form, header, main, footer"
+* **Click Events:** "button, a, input, [id]"
+* **Form Events:** "form"
