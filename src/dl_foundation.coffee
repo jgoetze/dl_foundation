@@ -82,7 +82,8 @@ class DataLayerFoundation
     @pushEvent(event, {
       triggerTagName: object.tagName,
       triggerId: object.getAttribute('id'),
-      triggerName: object.getAttribute('name')
+      triggerName: object.getAttribute('name'),
+      triggerEvent: event.split(/(?=[A-Z])/).join(" ").toLowerCase()
     })
 
 # Adds event happening to event log

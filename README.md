@@ -35,6 +35,7 @@ The events always contain the same data, if it available for a node:
 * **triggerTagName** (the tag name of the element e.g. FORM)
 * **triggerId** (the ID of the node)
 * **triggerName** (the name attribute of the node)
+* **triggerEvent** (the label of the event)
 
 ## Selectors
 
