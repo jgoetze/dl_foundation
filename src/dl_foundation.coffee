@@ -13,11 +13,17 @@ class DataLayerFoundation
     @bound      = false
     @event_list = {}
 
-  # Bind to the Events
-  # until this function is called, no active tracking happens
+# Bind to the Events
+# until this function is called, no active tracking happens
   bind: ->
+    return if !window.IntersectionObserver
     return if @bound
     dlf = @
+
+    ##########################################################
+    # Init DataLayer #########################################
+    ##########################################################
+    window.dataLayer = window.dataLayer || []
 
     ##########################################################
     # Bind Viewport Tracking #################################
@@ -50,19 +56,19 @@ class DataLayerFoundation
 
     @bound = true
 
-  # Called on Form Input
+# Called on Form Input
   formInputCallback: (form) =>
     @createEvent(form, 'receivedInput')
 
-  # Called on Form Submit
+# Called on Form Submit
   formSubmitCallback: (form) =>
     @createEvent(form, 'receivedSubmit')
 
-  # Called on Click
+# Called on Click
   clickCallback: (object) =>
     @createEvent(object, 'clicked', false)
 
-  # Called on Intersection
+# Called on Intersection
   intersectionCallback: (entries) =>
     for observation in entries
       object = observation.target
@@ -71,11 +77,11 @@ class DataLayerFoundation
       if observation.isIntersecting
         @createEvent(object, 'enteredViewport')
 
-      # object is not intersecting ANYMORE
+# object is not intersecting ANYMORE
       else if @eventHappened(object, 'enteredViewport')
         @createEvent(object, 'leftViewport')
 
-  # Checks event log and creates a new event if needed
+# Checks event log and creates a new event if needed
   createEvent: (object, event, single = true) =>
     return if single && @eventHappened(object, event)
 
@@ -87,29 +93,30 @@ class DataLayerFoundation
       triggerEvent: @generateEventLabel(object, event)
     })
 
-  # Generates trigger event label
+# Generates trigger event label
   generateEventLabel: (object, event) =>
     name = object.getAttribute('name') || object.getAttribute('id') || object.tagName
     event_string = event.split(/(?=[A-Z])/).join(" ")
 
     "#{name} #{event_string}".toLowerCase()
 
-  # Adds event happening to event log
+# Adds event happening to event log
   addEventHappening: (object, event) =>
     @event_list[@getEventKey(object, event)] = true
 
-  # Checks event log for event happening
+# Checks event log for event happening
   eventHappened: (object, event) =>
     @event_list[@getEventKey(object, event)] == true
 
-  # Creates a unique lookup key for an event
+# Creates a unique lookup key for an event
   getEventKey: (object, event) =>
     "#{object.dataset.dlfObjectID}//#{event}"
 
-  # Push an event to the data layer
+# Push an event to the data layer
   pushEvent: (event, eventData = {}) =>
     data = Object.assign(eventData, {'event': "#{@event_prefix}#{event}"})
-    dataLayer.push(data)
+
+    window.dataLayer.push(data)
 
 # Basic initialization
 window.dlf = new DataLayerFoundation()
