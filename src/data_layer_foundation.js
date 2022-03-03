@@ -9,6 +9,7 @@ class DataLayerFoundation {
     
         this.viewport_element_selector = "[id], form, header, main, footer";
         this.click_element_selector    = "button, a, input, [id]";
+        this.input_element_selector    = "input, select, textarea";
         this.form_element_selector     = "form";
     
         // working variables
@@ -82,14 +83,23 @@ class DataLayerFoundation {
 
 
         //////////////////////////////////////////////////////////
+        // Bind Input Tracking ///////////////////////////////////
+        //////////////////////////////////////////////////////////
+
+        let input_objects_to_watch = document.querySelectorAll(this.input_element_selector);
+        input_objects_to_watch.forEach(function(object) {
+            object.addEventListener("input", function() {
+                dlf.createEvent(object, 'receivedInput', false);
+            });
+        });
+
+
+        //////////////////////////////////////////////////////////
         // Bind Form Tracking ////////////////////////////////////
         //////////////////////////////////////////////////////////
 
         let forms_to_watch = document.querySelectorAll(this.form_element_selector);
         forms_to_watch.forEach(function(form) {
-            form.addEventListener("input", function() {
-                dlf.createEvent(form, 'receivedInput');
-            });
             form.addEventListener("submit", function() {
                 dlf.createEvent(form, 'receivedSubmit');
             });
