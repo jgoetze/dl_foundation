@@ -75,7 +75,9 @@ class DataLayerFoundation {
 
         let click_objects_to_watch = document.querySelectorAll(this.click_element_selector);
         click_objects_to_watch.forEach(function(object) {
-            object.addEventListener("click", function() { dlf.clickCallback(this); });
+            object.addEventListener("click", function() {
+                dlf.createEvent(object, 'receivedClick', false);
+            });
         });
 
 
@@ -85,45 +87,17 @@ class DataLayerFoundation {
 
         let forms_to_watch = document.querySelectorAll(this.form_element_selector);
         forms_to_watch.forEach(function(form) {
-            form.addEventListener("input", function() { dlf.formInputCallback(this) });
-            form.addEventListener("submit", function() { dlf.formSubmitCallback(this) });
+            form.addEventListener("input", function() {
+                dlf.createEvent(form, 'receivedInput');
+            });
+            form.addEventListener("submit", function() {
+                dlf.createEvent(form, 'receivedSubmit');
+            });
         });
 
 
         this.bound = true
     }
-
-    // Called on Form Input
-    formInputCallback(form) {
-        this.createEvent(form, 'receivedInput');
-    }
-
-    // Called on Form Submit
-    formSubmitCallback(form) {
-        this.createEvent(form, 'receivedSubmit');
-    }
-
-    // Called on Click
-    clickCallback(object) {
-        this.createEvent(object, 'clicked', false);
-    }
-
-    // Called on Intersection
-    // intersectionCallback(entries) {
-    //     entries.forEach(function(observation) {
-    //         let object = observation.target;
-    //         console.log(dlf);
-    //
-    //         // object is intersecting
-    //         if (observation.isIntersecting) {
-    //             this.createEvent(object, 'enteredViewport');
-    //         }
-    //         // object is not intersecting ANYMORE
-    //         else if (this.eventHappened(object, 'enteredViewport')) {
-    //             this.createEvent(object, 'leftViewport');
-    //         }
-    //     });
-    // }
 
     // Checks event log and creates a new event if needed
     createEvent(object, event, single = true) {
