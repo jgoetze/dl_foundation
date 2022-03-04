@@ -70,11 +70,11 @@ class DataLayerFoundation {
 
                 // object is intersecting
                 if (observation.isIntersecting) {
-                    dlf.createEvent(object, 'enteredViewport');
+                    dlf.createEvent(object, 'enteredViewport', false);
                 }
                 // object is not intersecting ANYMORE
                 else if (dlf.hasEventHappened(object, 'enteredViewport')) {
-                    dlf.createEvent(object, 'leftViewport');
+                    dlf.createEvent(object, 'leftViewport', false);
                 }
             });
         });
