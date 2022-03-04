@@ -37,6 +37,11 @@ The events always contain the same data, if it available for a node:
 * **triggerName** (the name attribute of the node)
 * **triggerEvent** (the label of the event)
 
+NOTE: Some of the auto generated event data can be overwritten with data attributes:
+
+* **data-dlf-id** overwrite **triggerId**
+* **data-dlf-name** overwrite **triggerName**
+
 ## Selectors
 
 Here is the list of selectors the listeners work on:

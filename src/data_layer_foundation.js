@@ -4,8 +4,8 @@
 class DataLayerFoundation {
     static debug = false;
     static event_prefix = "dlf.";
-    static viewport_element_selector = "[id], form, header, main, footer";
-    static click_element_selector    = "button, a, input, [id]";
+    static viewport_element_selector = "[id], [data-dlf-id], form, header, main, footer";
+    static click_element_selector    = "button, a, input, [id], [data-dlf-id]";
     static input_element_selector    = "input, select, textarea";
     static form_element_selector     = "form";
 
@@ -21,7 +21,12 @@ class DataLayerFoundation {
 
     // Generates trigger event label
     static getEventLabel(object, event) {
-        let name = object.getAttribute('name') || object.getAttribute('id') || object.tagName;
+        let name =
+            object.dataset['dlfName'] ||
+            object.dataset['dlfId'] ||
+            object.getAttribute('name') ||
+            object.getAttribute('id') ||
+            object.tagName;
         let event_string = event.split(/(?=[A-Z])/).join(" ");
 
         return (name + " " + event_string).toLowerCase();
@@ -126,8 +131,8 @@ class DataLayerFoundation {
         this.addEventHappening(object, event);
         DataLayerFoundation.pushEvent(event, {
             triggerTagName: object.tagName,
-            triggerId: object.getAttribute('id'),
-            triggerName: object.getAttribute('name'),
+            triggerId: object.dataset['dlfId'] || object.getAttribute('id'),
+            triggerName: object.dataset['dlfName'] || object.getAttribute('name'),
             triggerEvent: DataLayerFoundation.getEventLabel(object, event)
         });
     }
