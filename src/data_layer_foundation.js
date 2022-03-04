@@ -3,16 +3,13 @@
     
 class DataLayerFoundation {
     static debug = false;
+    static event_prefix = "dlf.";
+    static viewport_element_selector = "[id], form, header, main, footer";
+    static click_element_selector    = "button, a, input, [id]";
+    static input_element_selector    = "input, select, textarea";
+    static form_element_selector     = "form";
 
     constructor() {
-        this.event_prefix = "dlf.";
-    
-        this.viewport_element_selector = "[id], form, header, main, footer";
-        this.click_element_selector    = "button, a, input, [id]";
-        this.input_element_selector    = "input, select, textarea";
-        this.form_element_selector     = "form";
-    
-        // working variables
         this.bound      = false;
         this.event_list = {};
     }
@@ -28,6 +25,19 @@ class DataLayerFoundation {
         let event_string = event.split(/(?=[A-Z])/).join(" ");
 
         return (name + " " + event_string).toLowerCase();
+    }
+
+    // Push an event to the data layer
+    static pushEvent(event, eventData = {}) {
+        let data = Object.assign(eventData, {
+            'event': DataLayerFoundation.event_prefix + event
+        });
+
+        window.dataLayer.push(data);
+
+        if (DataLayerFoundation.debug) {
+            console.log("DLF", "pushEvent", data);
+        }
     }
 
     // Bind to the Events
@@ -48,7 +58,7 @@ class DataLayerFoundation {
         // Bind Viewport Tracking ////////////////////////////////
         //////////////////////////////////////////////////////////
 
-        let viewport_objects_to_watch = document.querySelectorAll(this.viewport_element_selector);
+        let viewport_objects_to_watch = document.querySelectorAll(DataLayerFoundation.viewport_element_selector);
         let observer = new IntersectionObserver(function(entries) {
             entries.forEach(function (observation) {
                 let object = observation.target;
@@ -58,7 +68,7 @@ class DataLayerFoundation {
                     dlf.createEvent(object, 'enteredViewport');
                 }
                 // object is not intersecting ANYMORE
-                else if (dlf.eventHappened(object, 'enteredViewport')) {
+                else if (dlf.hasEventHappened(object, 'enteredViewport')) {
                     dlf.createEvent(object, 'leftViewport');
                 }
             });
@@ -74,7 +84,7 @@ class DataLayerFoundation {
         // Bind Click Tracking ///////////////////////////////////
         //////////////////////////////////////////////////////////
 
-        let click_objects_to_watch = document.querySelectorAll(this.click_element_selector);
+        let click_objects_to_watch = document.querySelectorAll(DataLayerFoundation.click_element_selector);
         click_objects_to_watch.forEach(function(object) {
             object.addEventListener("click", function() {
                 dlf.createEvent(object, 'receivedClick', false);
@@ -86,7 +96,7 @@ class DataLayerFoundation {
         // Bind Input Tracking ///////////////////////////////////
         //////////////////////////////////////////////////////////
 
-        let input_objects_to_watch = document.querySelectorAll(this.input_element_selector);
+        let input_objects_to_watch = document.querySelectorAll(DataLayerFoundation.input_element_selector);
         input_objects_to_watch.forEach(function(object) {
             object.addEventListener("input", function() {
                 dlf.createEvent(object, 'receivedInput', false);
@@ -98,7 +108,7 @@ class DataLayerFoundation {
         // Bind Form Tracking ////////////////////////////////////
         //////////////////////////////////////////////////////////
 
-        let forms_to_watch = document.querySelectorAll(this.form_element_selector);
+        let forms_to_watch = document.querySelectorAll(DataLayerFoundation.form_element_selector);
         forms_to_watch.forEach(function(form) {
             form.addEventListener("submit", function() {
                 dlf.createEvent(form, 'receivedSubmit');
@@ -111,10 +121,10 @@ class DataLayerFoundation {
 
     // Checks event log and creates a new event if needed
     createEvent(object, event, single = true) {
-        if (single && this.eventHappened(object, event)) return;
+        if (single && this.hasEventHappened(object, event)) return;
 
         this.addEventHappening(object, event);
-        this.pushEvent(event, {
+        DataLayerFoundation.pushEvent(event, {
             triggerTagName: object.tagName,
             triggerId: object.getAttribute('id'),
             triggerName: object.getAttribute('name'),
@@ -128,21 +138,8 @@ class DataLayerFoundation {
     }
 
     // Checks event log for event happening
-    eventHappened(object, event) {
+    hasEventHappened(object, event) {
         return this.event_list[DataLayerFoundation.getEventKey(object, event)] === true;
-    }
-
-    // Push an event to the data layer
-    pushEvent(event, eventData = {}) {
-        let data = Object.assign(eventData, {
-            'event': this.event_prefix + event
-        });
-
-        window.dataLayer.push(data);
-
-        if (DataLayerFoundation.debug) {
-            console.log("DLF", "pushEvent", data);
-        }
     }
 }
 
