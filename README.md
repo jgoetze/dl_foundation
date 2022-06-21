@@ -10,6 +10,12 @@ Events are tracked for common HTML nodes like **header**, **main** and others (s
 Also nodes with an **ID** will be observed. This means you need to have a well structured HTML
 document, containing relevant tags as well as IDs on important elements like CTA buttons.
 
+## Settings
+
+You can adjust some behavior, using static settings.
+
+* **DataLayerFoundation.debug = true;** enables debug output to js console. 
+
 ## Events Tracked
 
 There are 3 main events tracked. Those are **view related events** like entering and leaving the viewport,
@@ -46,6 +52,7 @@ NOTE: Some of the auto generated event data can be overwritten with data attribu
 
 Here is the list of selectors the listeners work on:
 
-* **Viewport Events:** "[id], form, header, main, footer"
-* **Click Events:** "button, a, input, [id]"
+* **Viewport Events:** "[id], [data-dlf-id], form, header, main, footer"
+* **Click Events:** "button, a, input, [id], [data-dlf-id]"
+* **Input Events:+* "input, select, textarea"
 * **Form Events:** "form"
