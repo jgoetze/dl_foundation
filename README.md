@@ -15,6 +15,7 @@ document, containing relevant tags as well as IDs on important elements like CTA
 You can adjust some behavior, using static settings.
 
 * **DataLayerFoundation.debug = true;** enables debug output to js console. 
+* **DataLayerFoundation.event_whitelist = [];** allows to set published events
 
 ## Events Tracked
 

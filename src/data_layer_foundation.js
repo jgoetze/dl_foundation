@@ -9,6 +9,14 @@ class DataLayerFoundation {
     static input_element_selector    = "input, select, textarea";
     static form_element_selector     = "form";
 
+    static event_whitelist = [
+        "enteredViewport",
+        "leftViewport",
+        "receivedClick",
+        "receivedInput",
+        "receivedSubmit"
+    ];
+
     constructor() {
         this.bound      = false;
         this.event_list = {};
@@ -34,6 +42,9 @@ class DataLayerFoundation {
 
     // Push an event to the data layer
     static pushEvent(event, eventData = {}) {
+        if (!DataLayerFoundation.event_whitelist.includes(event)) return;
+
+
         let data = Object.assign(eventData, {
             'event': DataLayerFoundation.event_prefix + event
         });
